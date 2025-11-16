@@ -30,17 +30,3 @@ Este proyecto es un sistema web de gestión bancaria desarrollado para el Banco 
 
 ✔ Interfaz Web Amigable: Uso de JSF para formularios y validaciones.
 
-⚙️ Instalación
-
-git clone https://github.com/tu-usuario/DWF2.git
-# Edita src/main/resources/application.properties con tu DB
-mvn clean install
-mvn spring-boot:run
-
-
-🤝 Integrantes:
-
-- Denilson Emmanuel Chávez Cruz	CC161302
-- Ángel Marcelo Delgado Estrada	DE241507
-- Fabricio Antonio Castro Martinez CM240137
-- José Alonso Aguirre Márquez AM241838
