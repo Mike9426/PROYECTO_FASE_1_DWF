@@ -4,141 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel del Cliente</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap & Iconos -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Axios & SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Poppins', 'Lato', sans-serif;
+            background-color: #f4f6f9; /* Fondo claro */
         }
+
         .sidebar {
             height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding-top: 30px;
+            background: #111827; /* sidebar oscuro */
+            color: #e5e7eb;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 12px rgba(15, 23, 42, 0.35);
         }
-        .sidebar .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 30px;
-            border: 3px solid white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .sidebar .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        .sidebar .nav-link {
-            display: block;
-            width: 80%;
-            margin-bottom: 15px;
-            padding: 12px 15px;
+
+        /* Bloque con nombre del cliente */
+        .user-summary {
             text-align: left;
-            font-size: 15px;
-            border-radius: 30px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 500;
+            margin-bottom: 30px;
         }
+
+        .user-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        /* Links del menú */
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            background-color: transparent;
+            color: #e5e7eb;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
         .sidebar .nav-link i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
+
         .sidebar .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: #1f2937;
+            transform: translateX(3px);
+            border-left-color: #10B981; /* verde */
+            color: #ffffff;
         }
+
+        /* Botón Cerrar sesión */
         .sidebar .logout-btn {
             margin-top: auto;
-            margin-bottom: 30px;
-            width: 80%;
-            background-color: #ff4757;
+            margin-bottom: 10px;
+            width: 100%;
+            background-color: #ef4444;
             border: none;
             color: white;
-            padding: 12px;
-            border-radius: 30px;
-            text-align: center;
-            font-size: 15px;
+            padding: 11px;
+            border-radius: 999px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
         }
+
+        .sidebar .logout-btn i {
+            margin-right: 6px;
+        }
+
         .sidebar .logout-btn:hover {
-            background-color: #ff6b81;
-            transform: translateY(-2px);
+            background-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
+
         .main-content {
             padding: 30px;
         }
-        .account-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            margin-bottom: 20px;
-            overflow: hidden;
-            background: white;
-        }
-        .account-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        .account-card .card-body {
-            padding: 25px;
-        }
-        .account-card .card-title {
-            color: #343a40;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        .account-card .card-text {
-            font-size: 18px;
-        }
-        .account-card .balance {
-            font-size: 24px;
-            font-weight: 700;
-            color: #28a745;
-        }
-        .btn-add-account {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .btn-add-account:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
+
+        /* Ocultamos el h2 de bienvenida, ya no se usa */
         .welcome-title {
-            color: #343a40;
-            font-weight: 600;
-            margin-bottom: 30px;
+            display: none;
         }
+
         .section-title {
-            color: #495057;
+            color: #1f2937;
             font-weight: 500;
             margin-bottom: 20px;
             position: relative;
             padding-bottom: 10px;
         }
+
         .section-title:after {
             content: '';
             position: absolute;
@@ -146,29 +139,108 @@
             bottom: 0;
             width: 50px;
             height: 3px;
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: #10B981; /* verde */
             border-radius: 3px;
+        }
+
+        .account-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(15, 23, 42, 0.06);
+            transition: all 0.25s;
+            margin-bottom: 20px;
+            background: #ffffff;
+        }
+
+        .account-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+        }
+
+        .account-card .card-body {
+            padding: 22px;
+        }
+
+        .account-card .card-title {
+            color: #111827;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .account-card .card-text {
+            font-size: 16px;
+            color: #4b5563;
+        }
+
+        .account-card .balance {
+            font-size: 22px;
+            font-weight: 700;
+            color: #10B981; /* verde saldo */
+        }
+
+        /* Botón "Añadir nueva cuenta" → verde */
+        .btn-add-account {
+            background: #10B981;
+            border: none;
+            border-radius: 999px;
+            padding: 11px 22px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #ffffff;
+            transition: all 0.25s ease;
+            font-size: 14px;
+        }
+
+        .btn-add-account:hover {
+            background: #0e9a6f;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
         }
     </style>
 </head>
 <body>
 <div class="d-flex">
+    <!-- SIDEBAR -->
     <div class="sidebar">
-        <img src="/img/clientpfp.png" alt="Imagen de perfil" class="profile-img" onclick="window.location.href='/client/dashboard'">
-        <a href="/client/make-transaction" class="nav-link"><i class="fas fa-exchange-alt"></i> Realizar transacción</a>
-        <a href="/client/deposit-funds" class="nav-link"><i class="fas fa-coins"></i> Depositar fondos</a>
-        <a href="/client/withdraw-funds" class="nav-link"><i class="fas fa-hand-holding-usd"></i> Retirar fondos</a>
-        <a href="/client/transaction-history" class="nav-link"><i class="fas fa-history"></i> Historial de transacciones</a>
-        <button class="logout-btn" onclick="window.location.href='/logout'"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+        <div class="user-summary">
+            <div class="user-label">Cuenta a nombre de</div>
+            <div id="user-name" class="user-name">Cliente</div>
+        </div>
+
+        <a href="/client/make-transaction" class="nav-link">
+            <i class="fas fa-exchange-alt"></i>
+            Realizar transacción
+        </a>
+        <a href="/client/deposit-funds" class="nav-link">
+            <i class="fas fa-coins"></i>
+            Depositar fondos
+        </a>
+        <a href="/client/withdraw-funds" class="nav-link">
+            <i class="fas fa-hand-holding-usd"></i>
+            Retirar fondos
+        </a>
+        <a href="/client/transaction-history" class="nav-link">
+            <i class="fas fa-history"></i>
+            Historial de transacciones
+        </a>
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
     </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="flex-grow-1 main-content">
+        <!-- h2 de bienvenida ya no se muestra por CSS -->
         <h2 class="welcome-title" id="welcome-sign"></h2>
+
         <h4 class="section-title">Tus cuentas bancarias</h4>
         <div id="accounts-container" class="mt-4">
             <!-- Las cuentas aparecerán aquí -->
         </div>
     </div>
 </div>
+
 <script>
     // Función para formatear el número de cuenta en grupos de 3 dígitos
     function formatAccountNumber(accountNumber) {
@@ -183,11 +255,16 @@
             const userName = response.data.name;
             const container = document.getElementById('accounts-container');
 
+            // Mostrar nombre en el sidebar
+            const userNameEl = document.getElementById('user-name');
+            if (userNameEl) {
+                userNameEl.textContent = userName;
+            }
+
             // Usar el email obtenido para obtener las cuentas bancarias asociadas
             axios.get(`/api/account/${encodeURIComponent(userEmail)}`)
                 .then(response => {
                     const accounts = response.data;
-                    document.getElementById('welcome-sign').textContent = `Bienvenido, ${userName}`;
 
                     if (accounts.length === 0) {
                         container.innerHTML = '<p>No se encontraron cuentas.</p>';
@@ -199,7 +276,9 @@
                             accountCard.innerHTML = `
                                 <div class="card-body">
                                     <h5 class="card-title">Número de cuenta: ${formattedAccountNumber}</h5>
-                                    <p class="card-text">Saldo: <span class="balance">$${account.balance.toFixed(2)}</span></p>
+                                    <p class="card-text">Saldo:
+                                        <span class="balance">$${account.balance.toFixed(2)}</span>
+                                    </p>
                                 </div>
                             `;
                             container.appendChild(accountCard);
@@ -219,23 +298,25 @@
                 })
                 .catch(error => {
                     console.error('Error al obtener cuentas:', error);
-                    document.getElementById('accounts-container').innerHTML = '<p>Error al cargar las cuentas. Por favor, inténtelo más tarde.</p>';
+                    document.getElementById('accounts-container').innerHTML =
+                        '<p>Error al cargar las cuentas. Por favor, inténtelo más tarde.</p>';
                 });
         })
         .catch(error => {
             console.error('Error al obtener detalles del usuario:', error);
-            document.getElementById('accounts-container').innerHTML = '<p>Error al cargar los detalles del usuario. Por favor, inténtelo más tarde.</p>';
+            document.getElementById('accounts-container').innerHTML =
+                '<p>Error al cargar los detalles del usuario. Por favor, inténtelo más tarde.</p>';
         });
 
     // Función para crear una nueva cuenta con un número de cuenta aleatorio y DUI
     function createNewAccount(userEmail, userDui) {
-        const randomAccountNumber = Math.floor(10000000 + Math.random() * 90000000).toString(); // Genera un número de 8 dígitos
+        const randomAccountNumber = Math.floor(10000000 + Math.random() * 90000000).toString(); // 8 dígitos
 
         axios.post('/api/account', {
             accountNumber: randomAccountNumber,
             userEmail: userEmail,
             balance: 0.0, // Saldo inicial
-            dui: userDui // Incluir el DUI del usuario
+            dui: userDui   // Incluir el DUI del usuario
         })
             .then(response => {
                 Swal.fire({

@@ -4,102 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Préstamos | Banco Pipil</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap & Iconos -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Axios & SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --danger-color: #ff4757;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --info-color: #17a2b8;
+            --primary-green: #10B981;
+            --primary-green-dark: #059669;
+            --sidebar-bg: #111827;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
         }
 
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Poppins', 'Lato', sans-serif;
+            background-color: #f4f6f9;
         }
 
+        .d-flex {
+            min-height: 100vh;
+        }
+
+        /* ---------- SIDEBAR (igual que dashboard/empleados) ---------- */
         .sidebar {
             height: 100vh;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding-top: 30px;
+            background: var(--sidebar-bg);
+            color: #e5e7eb;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 12px rgba(15, 23, 42, 0.35);
         }
 
-        .sidebar .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+        .user-summary {
+            text-align: left;
             margin-bottom: 30px;
-            border: 3px solid white;
-            cursor: pointer;
-            transition: all 0.3s;
-            object-fit: cover;
         }
 
-        .sidebar .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .user-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f9fafb;
         }
 
         .sidebar .nav-link {
-            display: block;
-            width: 80%;
-            margin-bottom: 15px;
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 15px;
-            border-radius: 30px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            background-color: transparent;
+            color: #e5e7eb;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
             font-weight: 500;
+            border-left: 3px solid transparent;
         }
 
         .sidebar .nav-link i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
 
         .sidebar .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: #1f2937;
+            transform: translateX(3px);
+            border-left-color: var(--primary-green);
+            color: #ffffff;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #1f2937;
+            border-left-color: var(--primary-green);
+            color: #ffffff;
         }
 
         .sidebar .logout-btn {
             margin-top: auto;
-            margin-bottom: 30px;
-            width: 80%;
+            margin-bottom: 10px;
+            width: 100%;
             background-color: var(--danger-color);
             border: none;
             color: white;
-            padding: 12px;
-            border-radius: 30px;
-            text-align: center;
-            font-size: 15px;
+            padding: 11px;
+            border-radius: 999px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
+        }
+
+        .sidebar .logout-btn i {
+            margin-right: 6px;
         }
 
         .sidebar .logout-btn:hover {
-            background-color: #ff6b81;
-            transform: translateY(-2px);
+            background-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
 
+        /* ---------- MAIN CONTENT ---------- */
         .main-content {
             padding: 40px;
         }
@@ -108,106 +141,207 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eee;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
         }
 
         .page-title {
-            color: var(--secondary-color);
+            color: #1f2937;
             font-weight: 600;
             margin: 0;
+            font-size: 20px;
+            position: relative;
+            padding-bottom: 4px;
         }
 
+        .page-title i {
+            color: var(--primary-green);
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 120px;
+            height: 3px;
+            background: var(--primary-green);
+            border-radius: 999px;
+        }
+
+        .btn-group .btn {
+            font-size: 13px;
+            border-radius: 999px !important;
+            padding: 6px 14px;
+            border-color: #d1d5db;
+            color: #4b5563;
+        }
+
+        .btn-group .btn.active {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: #ffffff;
+        }
+
+        /* ---------- TABLA PRÉSTAMOS ---------- */
         .loan-table {
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+            background: #ffffff;
         }
 
         .loan-table thead {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
+            background: #111827;
+            color: #f9fafb;
         }
 
         .loan-table th {
             border: none;
             font-weight: 500;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .loan-table td {
             vertical-align: middle;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f3f4f6;
         }
 
         .status-pending {
             color: var(--warning-color);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .status-approved {
-            color: var(--success-color);
-            font-weight: 500;
+            color: var(--primary-green);
+            font-weight: 600;
         }
 
         .status-rejected {
             color: var(--danger-color);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .action-btn {
-            border-radius: 50px;
-            padding: 5px 15px;
-            font-size: 14px;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 13px;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
             margin: 2px;
         }
 
         .btn-approve {
-            background-color: var(--success-color);
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
             color: white;
+        }
+
+        .btn-approve:hover {
+            background-color: var(--primary-green-dark);
+            border-color: var(--primary-green-dark);
         }
 
         .btn-reject {
             background-color: var(--danger-color);
+            border-color: var(--danger-color);
             color: white;
+        }
+
+        .btn-reject:hover {
+            background-color: #b91c1c;
+            border-color: #b91c1c;
         }
 
         .btn-view {
             background-color: var(--info-color);
+            border-color: var(--info-color);
             color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
         }
 
         .currency {
             font-family: 'Courier New', monospace;
-            font-weight: bold;
+            font-weight: 600;
         }
 
-        .loading-row td {
-            text-align: center;
-            padding: 30px;
-            color: #6c757d;
-        }
-
+        .loading-row td,
         .no-loans-row td {
             text-align: center;
             padding: 30px;
-            color: #6c757d;
+            color: #6b7280;
+        }
+
+        .no-loans-row td {
             font-style: italic;
+        }
+
+        /* ---------- MODAL DETALLES ---------- */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.35);
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, var(--primary-green), var(--primary-green-dark));
+            color: white;
+            border-radius: 16px 16px 0 0 !important;
+            border: none;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-header .close span {
+            color: white;
+            font-size: 26px;
         }
     </style>
 </head>
 <body>
 <div class="d-flex">
+    <!-- SIDEBAR -->
     <div class="sidebar">
-        <img src="/img/manager-profile.png" alt="Imagen de perfil" class="profile-img" onclick="window.location.href='/gerente_sucursal/dashboard'">
-        <a href="/gerente_sucursal/employees" class="nav-link"><i class="fas fa-users"></i> Gestionar Empleados</a>
-        <a href="/gerente_sucursal/loans" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Préstamos Pendientes</a>
-        <button class="logout-btn" onclick="window.location.href='/logout'"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        <div class="user-summary">
+            <div class="user-label">Panel de</div>
+            <div class="user-name">Gerente de Sucursal</div>
+        </div>
+
+        <a href="/gerente_sucursal/employees" class="nav-link">
+            <i class="fas fa-users"></i> Gestionar Empleados
+        </a>
+        <a href="/gerente_sucursal/loans" class="nav-link active">
+            <i class="fas fa-file-invoice-dollar"></i> Préstamos
+        </a>
+        <a href="/gerente_sucursal/reports" class="nav-link">
+            <i class="fas fa-chart-bar"></i> Reportes
+        </a>
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
     </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content flex-grow-1">
         <div class="page-header">
-            <h2 class="page-title"><i class="fas fa-hand-holding-usd mr-2"></i>Gestión de Préstamos</h2>
+            <h2 class="page-title">
+                <i class="fas fa-hand-holding-usd mr-2"></i>Gestión de Préstamos
+            </h2>
             <div class="btn-group">
                 <button class="btn btn-outline-secondary active" id="filter-pending">Pendientes</button>
                 <button class="btn btn-outline-secondary" id="filter-approved">Aprobados</button>
@@ -216,7 +350,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table loan-table table-hover">
+            <table class="table loan-table table-hover mb-0">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -227,12 +361,15 @@
                     <th>Pago Mensual</th>
                     <th>Plazo</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    <th style="width: 230px;">Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="loan-list-body">
                 <tr class="loading-row">
-                    <td colspan="9"><i class="fas fa-spinner fa-spin mr-2"></i>Cargando préstamos...</td>
+                    <td colspan="9">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>
+                        Cargando préstamos...
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -242,10 +379,12 @@
 
 <!-- Modal para detalles del préstamo -->
 <div class="modal fade" id="loanDetailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-file-invoice-dollar mr-2"></i>Detalles del Préstamo</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-file-invoice-dollar mr-2"></i>Detalles del Préstamo
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -254,7 +393,9 @@
                 <!-- Contenido dinámico -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-dismiss="modal">
+                    Cerrar
+                </button>
             </div>
         </div>
     </div>
@@ -268,8 +409,10 @@
 
     // Inicializar la página
     document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar modal
-        loanDetailsModal = new bootstrap.Modal(document.getElementById('loanDetailsModal'));
+        // Inicializar modal (soporta Bootstrap 5 o Bootstrap 4)
+        if (window.bootstrap && bootstrap.Modal) {
+            loanDetailsModal = new bootstrap.Modal(document.getElementById('loanDetailsModal'));
+        }
 
         // Cargar préstamos
         loadLoans();
@@ -280,10 +423,14 @@
 
     // Configurar event listeners
     function setupEventListeners() {
-        // Filtros
-        document.getElementById('filter-pending').addEventListener('click', () => setFilter('PENDING'));
-        document.getElementById('filter-approved').addEventListener('click', () => setFilter('APPROVED'));
-        document.getElementById('filter-rejected').addEventListener('click', () => setFilter('REJECTED'));
+        document.getElementById('filter-pending')
+            .addEventListener('click', () => setFilter('PENDING'));
+
+        document.getElementById('filter-approved')
+            .addEventListener('click', () => setFilter('APPROVED'));
+
+        document.getElementById('filter-rejected')
+            .addEventListener('click', () => setFilter('REJECTED'));
     }
 
     // Establecer filtro
@@ -344,14 +491,17 @@
                 <td class="status-${loan.status.toLowerCase()}">${getStatusText(loan.status)}</td>
                 <td>
                     ${currentFilter === 'PENDING' ? `
-                    <button class="btn btn-approve action-btn" onclick="updateLoanStatus(${loan.id}, 'APPROVED')">
+                    <button class="btn btn-approve action-btn"
+                            onclick="updateLoanStatus(${loan.id}, 'APPROVED')">
                         <i class="fas fa-check mr-1"></i>Aprobar
                     </button>
-                    <button class="btn btn-reject action-btn" onclick="updateLoanStatus(${loan.id}, 'REJECTED')">
+                    <button class="btn btn-reject action-btn"
+                            onclick="updateLoanStatus(${loan.id}, 'REJECTED')">
                         <i class="fas fa-times mr-1"></i>Rechazar
                     </button>
                     ` : ''}
-                    <button class="btn btn-view action-btn" onclick="showLoanDetails(${loan.id})">
+                    <button class="btn btn-view action-btn"
+                            onclick="showLoanDetails(${loan.id})">
                         <i class="fas fa-eye mr-1"></i>Ver
                     </button>
                 </td>
@@ -368,30 +518,39 @@
         const detailsContent = document.getElementById('loan-details-content');
         detailsContent.innerHTML = `
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Información del Cliente</h5>
+                <div class="col-md-6 mb-3">
+                    <h5 class="mb-3">Información del Cliente</h5>
                     <p><strong>Nombre:</strong> ${loan.clientName}</p>
                     <p><strong>Correo:</strong> ${loan.email}</p>
                     <p><strong>DUI:</strong> ${formatDUI(loan.dui)}</p>
                 </div>
-                <div class="col-md-6">
-                    <h5>Detalles del Préstamo</h5>
+                <div class="col-md-6 mb-3">
+                    <h5 class="mb-3">Detalles del Préstamo</h5>
                     <p><strong>Monto:</strong> $${loan.amount.toFixed(2)}</p>
                     <p><strong>Tasa de interés:</strong> ${loan.interestRate}%</p>
                     <p><strong>Plazo:</strong> ${loan.termInYears} años</p>
                     <p><strong>Pago mensual:</strong> $${loan.monthlyPayment.toFixed(2)}</p>
-                    <p><strong>Estado:</strong> <span class="status-${loan.status.toLowerCase()}">${getStatusText(loan.status)}</span></p>
+                    <p><strong>Estado:</strong>
+                        <span class="status-${loan.status.toLowerCase()}">
+                            ${getStatusText(loan.status)}
+                        </span>
+                    </p>
                 </div>
             </div>
             <div class="mt-4">
-                <h5>Historial de Pagos</h5>
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle mr-2"></i>Esta funcionalidad estará disponible en futuras actualizaciones.
+                <h5 class="mb-2">Historial de Pagos</h5>
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Esta funcionalidad estará disponible en futuras actualizaciones.
                 </div>
             </div>
         `;
 
-        loanDetailsModal.show();
+        if (loanDetailsModal) {
+            loanDetailsModal.show();
+        } else {
+            $('#loanDetailsModal').modal('show');
+        }
     }
 
     // Actualizar estado del préstamo
@@ -412,7 +571,6 @@
             if (result.isConfirmed) {
                 axios.patch(`/api/loans/${loanId}/status`, { status })
                     .then(response => {
-                        // Actualizar datos locales
                         const updatedLoan = response.data;
                         const index = loansData.findIndex(l => l.id === loanId);
                         if (index !== -1) {
@@ -425,20 +583,23 @@
                             html: `El préstamo ha sido ${actionText}do exitosamente.`,
                         });
 
-                        // Actualizar vista
                         displayFilteredLoans();
                     })
                     .catch(error => {
                         console.error('Error al actualizar préstamo:', error);
-                        showError(`No se pudo ${actionText} el préstamo. Por favor, intente más tarde.`);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `No se pudo ${actionText} el préstamo. Por favor, intente más tarde.`,
+                        });
                     });
             }
         });
     }
 
-    // Funciones auxiliares
+    // Auxiliares
     function getStatusText(status) {
-        switch(status) {
+        switch (status) {
             case 'PENDING': return 'Pendiente';
             case 'APPROVED': return 'Aprobado';
             case 'REJECTED': return 'Rechazado';
@@ -456,7 +617,10 @@
         const tableBody = document.getElementById('loan-list-body');
         tableBody.innerHTML = `
             <tr class="loading-row">
-                <td colspan="9"><i class="fas fa-spinner fa-spin mr-2"></i>Cargando préstamos...</td>
+                <td colspan="9">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                    Cargando préstamos...
+                </td>
             </tr>
         `;
     }
@@ -465,13 +629,15 @@
         const tableBody = document.getElementById('loan-list-body');
         tableBody.innerHTML = `
             <tr class="no-loans-row">
-                <td colspan="9"><i class="fas fa-exclamation-triangle mr-2"></i>${message}</td>
+                <td colspan="9">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>${message}
+                </td>
             </tr>
         `;
     }
 </script>
 
-<!-- Bootstrap JS Bundle with Popper -->
+<!-- Bootstrap JS (para modales si usas la API jQuery de BS4) -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>

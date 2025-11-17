@@ -3,220 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realizar Transacción</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Historial de transacciones</title>
+
+    <!-- Bootstrap & Iconos -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Axios & SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Poppins', 'Lato', sans-serif;
+            background-color: #f4f6f9;
         }
+
+        .d-flex {
+            min-height: 100vh;
+        }
+
+        /* ---------- SIDEBAR (estilo dashboard) ---------- */
         .sidebar {
             height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding-top: 30px;
+            background: #111827;
+            color: #e5e7eb;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 12px rgba(15, 23, 42, 0.35);
         }
-        .sidebar .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 30px;
-            border: 3px solid white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .sidebar .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        .sidebar .nav-link {
-            display: block;
-            width: 80%;
-            margin-bottom: 15px;
-            padding: 12px 15px;
+
+        .user-summary {
             text-align: left;
-            font-size: 15px;
-            border-radius: 30px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 500;
+            margin-bottom: 30px;
         }
+
+        .user-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            background-color: transparent;
+            color: #e5e7eb;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
         .sidebar .nav-link i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
+
         .sidebar .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: #1f2937;
+            transform: translateX(3px);
+            border-left-color: #10B981;
+            color: #ffffff;
         }
+
+        .sidebar .nav-link.active {
+            background-color: #1f2937;
+            border-left-color: #10B981;
+            color: #ffffff;
+        }
+
         .sidebar .logout-btn {
             margin-top: auto;
-            margin-bottom: 30px;
-            width: 80%;
-            background-color: #ff4757;
+            margin-bottom: 10px;
+            width: 100%;
+            background-color: #ef4444;
             border: none;
             color: white;
-            padding: 12px;
-            border-radius: 30px;
-            text-align: center;
-            font-size: 15px;
+            padding: 11px;
+            border-radius: 999px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
         }
+
+        .sidebar .logout-btn i {
+            margin-right: 6px;
+        }
+
         .sidebar .logout-btn:hover {
-            background-color: #ff6b81;
-            transform: translateY(-2px);
+            background-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
+
+        /* ---------- MAIN CONTENT ---------- */
         .main-content {
-            padding: 40px;
+            padding: 30px;
         }
-        .transaction-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .card-header {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
+
+        .page-title {
+            color: #1f2937;
             font-weight: 600;
-            border-bottom: none;
-            padding: 20px;
-        }
-        .form-control {
-            border-radius: 50px;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
-        }
-        .form-control:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
-        }
-        .btn-transfer {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            border: none;
-            border-radius: 50px;
-            padding: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-        }
-        .btn-transfer:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .form-label {
-            font-weight: 500;
-            color: #495057;
             margin-bottom: 8px;
+            font-size: 22px;
         }
-        .account-option {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 20px;
         }
-        .account-option:last-child {
-            border-bottom: none;
+
+        /* ---------- CARD HISTORIAL ---------- */
+        .history-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+            background-color: #ffffff;
         }
-        .input-group-text {
-            border-radius: 50px 0 0 50px;
+
+        .history-card-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .input-group .form-control {
-            border-radius: 0 50px 50px 0;
+
+        .history-card-header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .history-card-header-left i {
+            font-size: 20px;
+            color: #10B981;
+            margin-right: 10px;
+        }
+
+        .history-card-header-left h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .history-card-body {
+            padding: 18px 22px 22px;
+        }
+
+        .badge-type {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .badge-type-own {
+            background-color: #ecfdf3;
+            color: #15803d;
+        }
+
+        .badge-type-other {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .badge-type-external {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-status {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .badge-status-completed {
+            background-color: #ecfdf5;
+            color: #047857;
+        }
+
+        .badge-status-pending {
+            background-color: #fefce8;
+            color: #92400e;
+        }
+
+        .badge-status-failed {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .table thead th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #6b7280;
+            border-top: none;
+            border-bottom-width: 1px;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+            vertical-align: middle;
+            color: #374151;
+        }
+
+        .table-responsive {
+            margin-bottom: 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 10px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .empty-state i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #9ca3af;
         }
     </style>
 </head>
 <body>
 <div class="d-flex">
+    <!-- SIDEBAR -->
     <div class="sidebar">
-        <img src="/img/clientpfp.png" alt="Imagen de perfil" class="profile-img" onclick="window.location.href='/client/dashboard'">
-        <a href="/client/make-transaction" class="nav-link"><i class="fas fa-exchange-alt"></i> Realizar transacción</a>
-        <a href="/client/deposit-funds" class="nav-link"><i class="fas fa-coins"></i> Depositar fondos</a>
-        <a href="/client/withdraw-funds" class="nav-link"><i class="fas fa-hand-holding-usd"></i> Retirar fondos</a>
-        <a href="/client/transaction-history" class="nav-link"><i class="fas fa-history"></i> Historial de transacciones</a>
-        <button class="logout-btn" onclick="window.location.href='/logout'"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+        <div class="user-summary">
+            <div class="user-label">Cuenta a nombre de</div>
+            <div id="user-name" class="user-name">Cliente</div>
+        </div>
+
+        <a href="/client/make-transaction" class="nav-link">
+            <i class="fas fa-exchange-alt"></i>
+            Realizar transacción
+        </a>
+        <a href="/client/deposit-funds" class="nav-link">
+            <i class="fas fa-coins"></i>
+            Depositar fondos
+        </a>
+        <a href="/client/withdraw-funds" class="nav-link">
+            <i class="fas fa-hand-holding-usd"></i>
+            Retirar fondos
+        </a>
+        <a href="/client/transaction-history" class="nav-link active">
+            <i class="fas fa-history"></i>
+            Historial de transacciones
+        </a>
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
     </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content flex-grow-1">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="transaction-card">
-                    <div class="card-header">
-                        <h4 class="mb-0"><i class="fas fa-exchange-alt mr-2"></i>Realizar Transacción</h4>
+        <h2 class="page-title">Historial de transacciones</h2>
+        <p class="page-subtitle">
+            Revisa los movimientos recientes de tus cuentas: depósitos, retiros y transferencias.
+        </p>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="history-card">
+                    <div class="history-card-header">
+                        <div class="history-card-header-left">
+                            <i class="fas fa-list-ul"></i>
+                            <h4 class="mb-0">Movimientos recientes</h4>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form id="transaction-form">
-                            <!-- Tipo de Transacción -->
-                            <div class="form-group">
-                                <label for="transaction-type" class="form-label">Tipo de Transacción</label>
-                                <select class="form-control" id="transaction-type" name="transactionType" required>
-                                    <option value="" disabled selected>Seleccione el tipo de transacción</option>
-                                    <option value="own">Entre mis cuentas</option>
-                                    <option value="other">A otros usuarios</option>
-                                    <option value="external">A cuentas externas</option>
-                                </select>
+                    <div class="history-card-body">
+                        <div id="history-container">
+                            <!-- Aquí se inyecta la tabla o el empty state -->
+                            <div class="empty-state" id="empty-state" style="display:none;">
+                                <i class="fas fa-receipt"></i>
+                                <p>No se han registrado transacciones aún.</p>
                             </div>
 
-                            <!-- Cuenta de Origen -->
-                            <div class="form-group">
-                                <label for="from-account-select" class="form-label">Cuenta de Origen</label>
-                                <select class="form-control" id="from-account-select" required>
-                                    <option value="" disabled selected>Seleccione su cuenta</option>
-                                    <!-- Cuentas se cargarán dinámicamente -->
-                                </select>
+                            <div class="table-responsive" id="table-wrapper" style="display:none;">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Cuenta origen</th>
+                                        <th>Cuenta destino</th>
+                                        <th class="text-right">Monto</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="transactions-body">
+                                    <!-- Filas dinámicas -->
+                                    </tbody>
+                                </table>
                             </div>
-
-                            <!-- Cuenta Destino: Mis Cuentas -->
-                            <div id="own-account-group" class="form-group" style="display: none;">
-                                <label for="own-account-select" class="form-label">Cuenta Destino</label>
-                                <select class="form-control" id="own-account-select">
-                                    <option value="" disabled selected>Seleccione su cuenta</option>
-                                    <!-- Cuentas se cargarán dinámicamente -->
-                                </select>
-                            </div>
-
-                            <!-- Cuenta Destino: Otros Usuarios -->
-                            <div id="other-account-group" class="form-group" style="display: none;">
-                                <label for="other-account" class="form-label">Número de Cuenta Destino</label>
-                                <input type="text" class="form-control" id="other-account" placeholder="Ingrese el número de cuenta" />
-                            </div>
-
-                            <!-- Cuenta Destino: Externas -->
-                            <div id="external-account-group" class="form-group" style="display: none;">
-                                <label for="external-account" class="form-label">Número de Cuenta Externa</label>
-                                <input type="text" class="form-control" id="external-account" placeholder="Ingrese el número de cuenta externa"/>
-                            </div>
-
-                            <!-- Monto de la Transacción -->
-                            <div class="form-group">
-                                <label for="transaction-amount" class="form-label">Monto</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input type="number" class="form-control" id="transaction-amount" step="0.01" placeholder="Ingrese el monto" required />
-                                </div>
-                            </div>
-
-                            <!-- Botón de Envío -->
-                            <button type="submit" class="btn btn-transfer btn-block mt-4">
-                                <i class="fas fa-paper-plane mr-2"></i>Transferir
-                            </button>
-                        </form>
-                    </div>
+                        </div>
+                    </div> <!-- card-body -->
                 </div>
             </div>
         </div>
@@ -224,61 +337,114 @@
 </div>
 
 <script>
-    // Función para formatear el número de cuenta
+    // Formato número de cuenta 000-000-000...
     function formatAccountNumber(accountNumber) {
-        return accountNumber.replace(/(\d{3})(?=\d)/g, '$1-');
+        if (!accountNumber) return '-';
+        return accountNumber.toString().replace(/(\d{3})(?=\d)/g, '$1-');
     }
 
-    // Obtener el email del usuario actual
+    // Formato fecha/hora amigable
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        if (isNaN(date)) return dateString;
+        return date.toLocaleString('es-SV', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // Badge tipo
+    function getTypeBadge(type) {
+        const t = (type || '').toLowerCase();
+        if (t === 'own' || t === 'entre_cuentas') {
+            return '<span class="badge-type badge-type-own">Entre mis cuentas</span>';
+        }
+        if (t === 'other' || t === 'interno') {
+            return '<span class="badge-type badge-type-other">A otro cliente</span>';
+        }
+        if (t === 'external' || t === 'externo') {
+            return '<span class="badge-type badge-type-external">Cuenta externa</span>';
+        }
+        return `<span class="badge-type badge-type-other">${type || 'Otro'}</span>`;
+    }
+
+    // Badge estado
+    function getStatusBadge(status) {
+        const s = (status || '').toLowerCase();
+        if (s === 'completed' || s === 'exitoso') {
+            return '<span class="badge-status badge-status-completed">Completado</span>';
+        }
+        if (s === 'pending' || s === 'pendiente') {
+            return '<span class="badge-status badge-status-pending">Pendiente</span>';
+        }
+        if (s === 'failed' || s === 'fallido' || s === 'rechazado') {
+            return '<span class="badge-status badge-status-failed">Fallido</span>';
+        }
+        return `<span class="badge-status badge-status-pending">${status || 'N/A'}</span>`;
+    }
+
+    // Cargar usuario + historial
     axios.get('/api/users/current')
         .then(response => {
             const userEmail = response.data.email;
+            const userName = response.data.name;
 
-            // Obtener las cuentas asociadas al usuario
-            axios.get(`/api/account/${encodeURIComponent(userEmail)}`)
-                .then(response => {
-                    const accounts = response.data;
-                    const fromAccountSelect = document.getElementById('from-account-select');
-                    const ownAccountSelect = document.getElementById('own-account-select');
+            // Nombre en sidebar
+            const userNameEl = document.getElementById('user-name');
+            if (userNameEl) {
+                userNameEl.textContent = userName;
+            }
 
-                    if (accounts.length === 0) {
-                        fromAccountSelect.innerHTML = '<option value="">No hay cuentas disponibles</option>';
-                        ownAccountSelect.innerHTML = '<option value="">No hay cuentas disponibles</option>';
-                    } else {
-                        accounts.forEach(account => {
-                            const optionFrom = document.createElement('option');
-                            optionFrom.value = account.accountNumber;
-                            optionFrom.textContent = `Cuenta ${formatAccountNumber(account.accountNumber)} - Saldo: $${account.balance.toFixed(2)}`;
-                            fromAccountSelect.appendChild(optionFrom);
+            // Aquí ajusta la URL a tu backend si usas otra ruta
+            return axios.get(`/api/transaction/history/${encodeURIComponent(userEmail)}`);
+        })
+        .then(response => {
+            const transactions = response.data || [];
+            const tbody = document.getElementById('transactions-body');
+            const emptyState = document.getElementById('empty-state');
+            const tableWrapper = document.getElementById('table-wrapper');
 
-                            const optionOwn = document.createElement('option');
-                            optionOwn.value = account.accountNumber;
-                            optionOwn.textContent = `Cuenta ${formatAccountNumber(account.accountNumber)} - Saldo: $${account.balance.toFixed(2)}`;
-                            ownAccountSelect.appendChild(optionOwn);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar cuentas:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'No se pudieron cargar las cuentas. Por favor, intente más tarde.',
-                    });
-                });
+            if (!transactions.length) {
+                emptyState.style.display = 'block';
+                tableWrapper.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            tableWrapper.style.display = 'block';
+
+            transactions.forEach(tx => {
+                const tr = document.createElement('tr');
+
+                const fromAcc = formatAccountNumber(tx.accountNumberFrom || tx.accountNumber || tx.fromAccount);
+                const toAcc = formatAccountNumber(tx.accountNumberTo || tx.toAccount);
+                const amount = (tx.amount || tx.monto || 0).toFixed
+                    ? tx.amount.toFixed(2)
+                    : Number(tx.amount || tx.monto || 0).toFixed(2);
+
+                tr.innerHTML = `
+                    <td>${formatDate(tx.date || tx.transactionDate)}</td>
+                    <td>${getTypeBadge(tx.type || tx.transactionType)}</td>
+                    <td>${fromAcc}</td>
+                    <td>${toAcc}</td>
+                    <td class="text-right">$${amount}</td>
+                    <td>${getStatusBadge(tx.status)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         })
         .catch(error => {
-            console.error('Error al obtener información del usuario:', error);
+            console.error('Error al cargar historial:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'No se pudo cargar la información del usuario. Por favor, intente más tarde.',
+                title: 'Error al cargar historial',
+                text: 'No se pudo obtener el historial de transacciones. Intente nuevamente más tarde.'
             });
         });
-
-    // Mostrar/ocultar campos según el tipo de transacción seleccionado
-    document.getElementById('transaction-type').addEventListener('change', function () {
-        const transactionType = this.value;
-
-        // Mostrar/ocultar grupos según el tipo de transacción
-        document.getElementById('own-account-group').style.display
+</script>
+</body>
+</html>

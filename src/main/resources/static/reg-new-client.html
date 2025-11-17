@@ -8,81 +8,105 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f4f6f9;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', 'Lato', sans-serif;
         }
+
         .register-container {
             max-width: 500px;
             margin: auto;
             background-color: #ffffff;
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
         }
+
         .form-title {
             text-align: center;
             margin-bottom: 30px;
-            color: #343a40;
+            color: #1F2937;
             font-weight: 600;
+            font-family: 'Poppins', sans-serif;
         }
+
         .form-title i {
-            color: #764ba2;
+            color: #2E3A59;
             margin-right: 10px;
         }
+
         .form-control {
-            border-radius: 50px;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1.8px solid #d1d5db;
+            transition: all 0.3s ease;
+            font-family: 'Lato', sans-serif;
+            background: #fff;
         }
+
         .form-control:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
+            border-color: #2E3A59;
+            box-shadow: 0 0 0 0.15rem rgba(46, 58, 89, 0.25);
         }
+
+        /* BOTÓN VERDE (igual al login) */
         .btn-register {
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: #10B981; /* VERDE LOGIN */
             border: none;
-            border-radius: 50px;
+            color: #fff;
+            border-radius: 12px;
             padding: 12px;
             font-weight: 600;
             letter-spacing: 0.5px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
+
         .btn-register:hover {
+            background: #0e9a6f; /* Hover verde oscuro */
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(16,185,129,0.25);
         }
+
         .login-link {
-            color: #764ba2;
+            color: #2E3A59;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
+
         .login-link:hover {
-            color: #667eea;
+            color: #1F2937;
             text-decoration: none;
         }
+
         .input-group-text {
-            border-radius: 50px 0 0 50px;
-            background-color: #f8f9fa;
+            border-radius: 12px 0 0 12px;
+            background-color: #f3f4f6;
+            border: 1.8px solid #d1d5db;
         }
+
         .password-strength {
             height: 5px;
             margin-top: 5px;
             border-radius: 5px;
-            background-color: #e9ecef;
+            background-color: #e5e7eb;
             overflow: hidden;
         }
+
         .strength-bar {
             height: 100%;
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.3s ease;
         }
     </style>
+
+
 </head>
 <body>
 <div class="container">

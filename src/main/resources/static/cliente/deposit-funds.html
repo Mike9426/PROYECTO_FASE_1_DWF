@@ -4,158 +4,297 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Depositar Fondos</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Axios + SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Poppins', 'Lato', sans-serif;
+            background-color: #f4f6f9;
         }
+
+        .d-flex {
+            min-height: 100vh;
+        }
+
+        /* ---------- SIDEBAR (IGUAL AL DASHBOARD) ---------- */
         .sidebar {
             height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding-top: 30px;
+            background: #111827; /* oscuro */
+            color: #e5e7eb;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 4px 0 12px rgba(15, 23, 42, 0.35);
         }
-        .sidebar .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 30px;
-            border: 3px solid white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .sidebar .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        .sidebar .nav-link {
-            display: block;
-            width: 80%;
-            margin-bottom: 15px;
-            padding: 12px 15px;
+
+        .user-summary {
             text-align: left;
-            font-size: 15px;
-            border-radius: 30px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 500;
+            margin-bottom: 30px;
         }
+
+        .user-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            background-color: transparent;
+            color: #e5e7eb;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            font-family: 'Lato', sans-serif;
+            border-left: 3px solid transparent;
+        }
+
         .sidebar .nav-link i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 16px;
         }
+
         .sidebar .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: #1f2937;
+            transform: translateX(3px);
+            border-left-color: #10B981; /* verde */
+            color: #ffffff;
         }
+
+        .sidebar .nav-link.active {
+            background-color: #1f2937;
+            border-left-color: #10B981;
+            color: #ffffff;
+        }
+
         .sidebar .logout-btn {
             margin-top: auto;
-            margin-bottom: 30px;
-            width: 80%;
-            background-color: #ff4757;
+            margin-bottom: 10px;
+            width: 100%;
+            background-color: #ef4444;
             border: none;
             color: white;
-            padding: 12px;
-            border-radius: 30px;
-            text-align: center;
-            font-size: 15px;
+            padding: 11px;
+            border-radius: 999px;
+            font-size: 14px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.25s ease;
+            font-family: 'Lato', sans-serif;
         }
+
+        .sidebar .logout-btn i {
+            margin-right: 6px;
+        }
+
         .sidebar .logout-btn:hover {
-            background-color: #ff6b81;
-            transform: translateY(-2px);
+            background-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
+
+        /* ---------- MAIN CONTENT ---------- */
         .main-content {
             padding: 40px;
+            flex-grow: 1;
         }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        /* ---------- CARD DEPÓSITO (mejorada) ---------- */
         .deposit-card {
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
             overflow: hidden;
+            background: #ffffff;
+            margin-top: 20px;
         }
-        .card-header {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            color: white;
+
+        .deposit-card-header {
+            padding: 24px 40px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: #f9fafb;
+        }
+
+        .deposit-card-header i {
+            font-size: 24px;
+            color: #10B981; /* verde del dashboard */
+            margin-right: 10px;
+        }
+
+        .deposit-card-title {
+            font-size: 19px;
             font-weight: 600;
-            border-bottom: none;
-            padding: 20px;
+            color: #111827;
+            margin: 0;
         }
-        .form-control {
-            border-radius: 50px;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
+
+        .card-body {
+            padding: 32px 40px 30px;
+            background-color: #ffffff;
         }
-        .form-control:focus {
-            border-color: #764ba2;
-            box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.25);
+
+        .form-group {
+            margin-bottom: 20px;
         }
-        .btn-deposit {
-            background: linear-gradient(to right, #667eea, #764ba2);
-            border: none;
-            border-radius: 50px;
-            padding: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-        }
-        .btn-deposit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+
         .form-label {
             font-weight: 500;
-            color: #495057;
-            margin-bottom: 8px;
+            color: #374151;
+            margin-bottom: 6px;
+            font-size: 14px;
         }
-        .account-option {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+
+        .form-text {
+            font-size: 12px;
         }
-        .account-option:last-child {
-            border-bottom: none;
+
+        .form-control {
+            border-radius: 999px;
+            padding: 13px 20px;
+            border: 1.5px solid #d1d5db;
+            transition: all 0.2s ease;
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            background-color: #ffffff;
+        }
+
+        .form-control:focus {
+            border-color: #10B981;
+            box-shadow: 0 0 0 0.16rem rgba(16, 185, 129, 0.25);
+        }
+
+        .input-group-text {
+            border-radius: 999px 0 0 999px;
+            border: 1.5px solid #d1d5db;
+            border-right: 0;
+            background-color: #f3f4f6;
+            font-size: 14px;
+        }
+
+        .btn-deposit {
+            background: #10B981;
+            border: none;
+            border-radius: 999px;
+            padding: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+        }
+
+        .btn-deposit:hover {
+            background: #0e9a6f;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.30);
+        }
+
+        .btn-deposit i {
+            margin-right: 6px;
         }
     </style>
 </head>
 <body>
 <div class="d-flex">
+    <!-- SIDEBAR (igual al dashboard) -->
     <div class="sidebar">
-        <img src="/img/clientpfp.png" alt="Imagen de perfil" class="profile-img" onclick="window.location.href='/client/dashboard'">
-        <a href="/client/make-transaction" class="nav-link"><i class="fas fa-exchange-alt"></i> Realizar transacción</a>
-        <a href="/client/deposit-funds" class="nav-link"><i class="fas fa-coins"></i> Depositar fondos</a>
-        <a href="/client/withdraw-funds" class="nav-link"><i class="fas fa-hand-holding-usd"></i> Retirar fondos</a>
-        <a href="/client/transaction-history" class="nav-link"><i class="fas fa-history"></i> Historial de transacciones</a>
-        <button class="logout-btn" onclick="window.location.href='/logout'"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+        <div class="user-summary">
+            <div class="user-label">Cuenta a nombre de</div>
+            <div id="user-name" class="user-name">Cliente</div>
+        </div>
+
+        <a href="/client/make-transaction" class="nav-link">
+            <i class="fas fa-exchange-alt"></i>
+            Realizar transacción
+        </a>
+        <a href="/client/deposit-funds" class="nav-link active">
+            <i class="fas fa-coins"></i>
+            Depositar fondos
+        </a>
+        <a href="/client/withdraw-funds" class="nav-link">
+            <i class="fas fa-hand-holding-usd"></i>
+            Retirar fondos
+        </a>
+        <a href="/client/transaction-history" class="nav-link">
+            <i class="fas fa-history"></i>
+            Historial de transacciones
+        </a>
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
     </div>
+
+    <!-- MAIN CONTENT -->
     <div class="main-content flex-grow-1">
+        <h2 class="page-title">Depositar fondos en tu cuenta</h2>
+        <p class="page-subtitle">
+            Selecciona una de tus cuentas activas e ingresa el monto que deseas depositar.
+        </p>
+
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="deposit-card">
-                    <div class="card-header">
-                        <h4 class="mb-0"><i class="fas fa-coins mr-2"></i>Depositar Fondos</h4>
+                    <div class="deposit-card-header">
+                        <i class="fas fa-coins"></i>
+                        <h4 class="deposit-card-title mb-0">Depositar Fondos</h4>
                     </div>
                     <div class="card-body">
                         <form id="deposit-form">
                             <!-- Seleccionar Cuenta -->
                             <div class="form-group">
-                                <label for="account-select" class="form-label">Seleccionar Cuenta:</label>
+                                <label for="account-select" class="form-label">Seleccionar cuenta</label>
                                 <select class="form-control" id="account-select" required>
                                     <!-- Las cuentas se cargarán dinámicamente -->
                                 </select>
@@ -163,17 +302,27 @@
 
                             <!-- Ingresar Monto -->
                             <div class="form-group">
-                                <label for="deposit-amount" class="form-label">Monto:</label>
+                                <label for="deposit-amount" class="form-label">Monto a depositar</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input type="number" class="form-control" id="deposit-amount" step="0.01" placeholder="Ingrese el monto" required>
+                                    <input type="number"
+                                           class="form-control"
+                                           id="deposit-amount"
+                                           step="0.01"
+                                           min="0"
+                                           placeholder="Ingrese el monto"
+                                           required>
                                 </div>
+                                <small class="form-text text-muted">
+                                    El monto debe ser mayor a $0.00
+                                </small>
                             </div>
 
-                            <button type="submit" class="btn btn-deposit btn-block mt-4">
-                                <i class="fas fa-money-bill-wave mr-2"></i>Depositar
+                            <button type="submit" class="btn btn-deposit btn-block mt-3">
+                                <i class="fas fa-money-bill-wave"></i>
+                                Depositar
                             </button>
                         </form>
                     </div>
@@ -184,48 +333,49 @@
 </div>
 
 <script>
-    // Función para formatear el número de cuenta
+    // Formatear número de cuenta en grupos de 3 dígitos
     function formatAccountNumber(accountNumber) {
         return accountNumber.replace(/(\d{3})(?=\d)/g, '$1-');
     }
 
-    // Obtener el email del usuario actual
+    // Obtener información del usuario actual y sus cuentas
     axios.get('/api/users/current')
         .then(response => {
             const userEmail = response.data.email;
+            const userName = response.data.name;
+
+            const userNameEl = document.getElementById('user-name');
+            if (userNameEl) {
+                // sólo el nombre; el label "Cuenta a nombre de" ya está en HTML
+                userNameEl.textContent = userName;
+            }
 
             // Obtener las cuentas del usuario
-            axios.get(`/api/account/${encodeURIComponent(userEmail)}`)
-                .then(response => {
-                    const accounts = response.data;
-                    const accountSelect = document.getElementById('account-select');
+            return axios.get(`/api/account/${encodeURIComponent(userEmail)}`);
+        })
+        .then(response => {
+            const accounts = response.data;
+            const accountSelect = document.getElementById('account-select');
 
-                    if (accounts.length === 0) {
-                        accountSelect.innerHTML = '<option value="">No hay cuentas disponibles</option>';
-                    } else {
-                        accounts.forEach(account => {
-                            const option = document.createElement('option');
-                            option.value = account.accountNumber;
-                            option.textContent = `Cuenta ${formatAccountNumber(account.accountNumber)} - Saldo: $${account.balance.toFixed(2)}`;
-                            accountSelect.appendChild(option);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar cuentas:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'No se pudieron cargar las cuentas. Por favor, intente más tarde.',
-                    });
+            if (accounts.length === 0) {
+                accountSelect.innerHTML = '<option value="">No hay cuentas disponibles</option>';
+                accountSelect.disabled = true;
+            } else {
+                accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account.accountNumber;
+                    option.textContent =
+                        `Cuenta ${formatAccountNumber(account.accountNumber)} · Saldo: $${account.balance.toFixed(2)}`;
+                    accountSelect.appendChild(option);
                 });
+            }
         })
         .catch(error => {
-            console.error('Error al obtener información del usuario:', error);
+            console.error('Error al obtener información del usuario o cuentas:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo cargar la información del usuario. Por favor, intente más tarde.',
+                text: 'No se pudo cargar la información del usuario o sus cuentas. Intente de nuevo más tarde.'
             });
         });
 
@@ -236,25 +386,24 @@
         const accountNumber = document.getElementById('account-select').value;
         const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
 
-        if (!accountNumber || depositAmount <= 0 || isNaN(depositAmount)) {
+        if (!accountNumber || isNaN(depositAmount) || depositAmount <= 0) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Entrada Inválida',
-                text: 'Por favor seleccione una cuenta válida e ingrese un monto positivo.',
+                title: 'Entrada inválida',
+                text: 'Seleccione una cuenta válida e ingrese un monto mayor a 0.'
             });
             return;
         }
 
-        // Enviar solicitud de depósito
         axios.post('/api/transaction/deposit', {
             accountNumber: accountNumber,
             amount: depositAmount
         })
-            .then(response => {
+            .then(() => {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Depósito Exitoso',
-                    text: `Se depositaron exitosamente $${depositAmount.toFixed(2)} en la cuenta ${formatAccountNumber(accountNumber)}.`,
+                    title: 'Depósito exitoso',
+                    text: `Se depositaron $${depositAmount.toFixed(2)} en la cuenta ${formatAccountNumber(accountNumber)}.`,
                     confirmButtonText: 'OK'
                 }).then(() => {
                     location.reload();
@@ -264,8 +413,8 @@
                 console.error('Error al procesar el depósito:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Depósito Fallido',
-                    text: error.response ? error.response.data : 'Ocurrió un error. Por favor, intente nuevamente más tarde.',
+                    title: 'Depósito fallido',
+                    text: error.response ? error.response.data : 'Ocurrió un error. Intente nuevamente más tarde.'
                 });
             });
     });
